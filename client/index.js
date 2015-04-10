@@ -2,6 +2,8 @@
 
 $(document).ready(init);
 
+var moveStaged = false;
+
 function init(){
   paintCheckers();
   whichPlayerStartsFirst();
@@ -33,46 +35,52 @@ function activePlayerToggle(){
 }
 
 function clickToPick(){
-  console.log($(this));
-  if($(this).hasClass('highlightedspace')){
-    $(this).toggleClass('highlightedspace');
+  if(moveStaged){
+    if($(this).hasClass('highlightedspace')){
+      $(this).removeClass('highlightedspace');
+      moveStaged = false;
+    }
+    else{
+      movePiece(this);
+      activePlayerToggle();
+      moveStaged = false;
+      findLegalMoves();
+    }
   }
-  else if($('.highlightedspace').length > 0){
-    movePiece(this);
-    activePlayerToggle();
-  }
-  else {
+  else{
     $(this).addClass('highlightedspace');
     var x = $(this).data('x');
     var y = $(this).data('y');
+    moveStaged = true;
     findLegalMoves(x, y);
   }
 }
 
-function findLegalMoves(){
-  //p1 pawn moves +y
-  //p2 pawn moves -y
+function findLegalMoves(x, y){
   $('td').off('click');
+  setLegalSpace(x, y); // set current space
   var activePlayer = $('.activeplayer').attr('id');
-  var arrayOfSpaces = createArrayOfPlayerSpaces(activePlayer);
-
-  arrayOfSpaces.forEach(function(array) {
-  if(activePlayer === 'p1'){
-    y++;
-    [-1, 1].forEach(function(i) {
-      if(isPositionOnBoard(i + x, y)){
-        setLegalSpace(i + x, y);
-      }
+  if(moveStaged){
+    var arrayOfSpaces = createArrayOfPlayerSpaces(activePlayer);
+    arrayOfSpaces.forEach(function(array) {
+      var x = array[0];
+      var y = array[1];
+      var yDirection = (activePlayer === 'p1') ? 1 : -1;
+      [1, -1].forEach(function(i) {
+        if(isPositionOnBoard(x + i, y + yDirection)){
+          setLegalSpace(x + 1, y + yDirection);
+          console.log(x + 1, y + yDirection);
+        }
+      });
     });
   }
-  if(activePlayer === 'p2'){
-    y--;
-    [-1, 1].forEach(function(i) {
-      if(isPositionOnBoard(i + x, y)){
-        setLegalSpace(i + x, y);
-      }
+  else{
+    var arrayOfSpaces = createArrayOfPlayerSpaces(activePlayer);
+    arrayOfSpaces.forEach(function(array){
+      var x = array[0];
+      var y = array[1];
+      setLegalSpace(x, y);
     });
-  });
   }
 }
 
