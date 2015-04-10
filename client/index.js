@@ -59,6 +59,7 @@ function clickToPick(){
 
 function findLegalMoves(x, y){
   $('td').off('click');
+  $('.debughighlight').removeClass('debughighlight');
   setLegalSpace(x, y); // set current space
   var activePlayer = $('.activeplayer').attr('id');
   if(moveStaged){
@@ -68,7 +69,7 @@ function findLegalMoves(x, y){
     var yDirection = (activePlayer === 'p1') ? 1 : -1;
     [1, -1].forEach(function(i) {
       if(isPositionOnBoard(x + i, y + yDirection)){
-        if(isCompetitorNotInTheWay(x + i, y + yDirection, activePlayer)){
+        if(isCompetitorAndPlayerNotInTheWay(x + i, y + yDirection, activePlayer)){
           setLegalSpace(x + i, y + yDirection);
         }
         else{
@@ -100,10 +101,11 @@ function isPositionOnBoard(x, y){
   return xIsGood && yIsGood;
 }
 
-function isCompetitorNotInTheWay(x, y, player){
+function isCompetitorAndPlayerNotInTheWay(x, y, player){
   var competitor = (player === 'p1') ? 'p2' : 'p1';
-  if($('[data-x=' + x + '][data-y=' + y + ']').hasClass(competitor)){
-      return false;
+  var loc = $('[data-x=' + x + '][data-y=' + y + ']');
+  if(($(loc).hasClass(player)) || ($(loc).hasClass(competitor))){
+    return false;
   }
   else{
     return true;
@@ -123,15 +125,15 @@ function canJump(x, y){
   }
 }
 
-
 function setLegalSpace(x, y){
     var $loc = $('[data-x=' + x + '][data-y=' + y + ']');
     $loc.on('click', clickToPick);
+    $loc.addClass('debughighlight');
 }
 
 function movePiece(space){
   var activePlayer = $('.activeplayer').attr('id');
-  $('.highlightedspace').removeClass('activeplayer').removeClass(activePlayer + '-pawn').removeClass('highlightedspace');
+  $('.highlightedspace').removeClass(activePlayer).removeClass(activePlayer + '-pawn').removeClass('highlightedspace');
   $(space).addClass(activePlayer).addClass(activePlayer + '-pawn');
 }
 
