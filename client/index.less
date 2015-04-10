@@ -2,7 +2,9 @@
   margin: 0 auto;
 }
 #controls{
-  display: inline;
+  display: block;
+  width: 100px;
+  color: white;
 }
 .space{
   width: 80px;
@@ -10,34 +12,47 @@
 }
 .black{
   background-color: black;
+  border: 4px black solid;
 }
 .white{
   background-color: white;
 }
-.marmot-red{
+.p1-pawn{
   background-image: url('/assets/marmot-red.png');
   background-size: 60px;
   background-repeat: no-repeat;
   background-position: center;
 }
-.marmot-black{
+.p2-pawn{
   background-image: url('/assets/marmot-black.png');
   background-size: 60px;
   background-repeat: no-repeat;
   background-position: center;
 }
-.grizzly-red{
+.p1-king{
   background-image: url('/assets/grizzly-red.png');
-  background-size: 60px;
+  background-size: 36px;
   background-repeat: no-repeat;
   background-position: center;
 }
-.grizzly-black{
+.p2-king{
   background-image: url('/assets/grizzly-black.png');
-  background-size: 60px;
+  background-size: 40px;
   background-repeat: no-repeat;
   background-position: center;
 }
 .activeplayer{
-    border: 2px red solid;
+    border: 4px green solid;
+}
+#players{
+
+}
+#p1{
+  background-color: #d58123;
+}
+#p2{
+  background-color: black;
+}
+.highlightedspace{
+  border: 4px green yellow;
 }
