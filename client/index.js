@@ -39,6 +39,7 @@ function clickToPick(){
     if($(this).hasClass('highlightedspace')){
       $(this).removeClass('highlightedspace');
       moveStaged = false;
+      findLegalMoves();
     }
     else{
       movePiece(this);
@@ -61,17 +62,17 @@ function findLegalMoves(x, y){
   setLegalSpace(x, y); // set current space
   var activePlayer = $('.activeplayer').attr('id');
   if(moveStaged){
-    var arrayOfSpaces = createArrayOfPlayerSpaces(activePlayer);
-    arrayOfSpaces.forEach(function(array) {
-      var x = array[0];
-      var y = array[1];
-      var yDirection = (activePlayer === 'p1') ? 1 : -1;
-      [1, -1].forEach(function(i) {
-        if(isPositionOnBoard(x + i, y + yDirection)){
-          setLegalSpace(x + 1, y + yDirection);
-          console.log(x + 1, y + yDirection);
-        }
-      });
+    var loc = $('.highlightedspace');
+    console.log(loc);
+    var x = loc.data('x');
+    var y = loc.data('y');
+    console.log(x, y);
+    var yDirection = (activePlayer === 'p1') ? 1 : -1;
+    [1, -1].forEach(function(i) {
+      if(isPositionOnBoard(x + i, y + yDirection)){
+        setLegalSpace(x + i, y + yDirection);
+        console.log(x + i, y + yDirection);
+      }
     });
   }
   else{
