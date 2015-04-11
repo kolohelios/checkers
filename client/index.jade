@@ -1,7 +1,7 @@
 doctype html
 html
   head
-    meta(charset='utf-8')      
+    meta(charset='utf-8')
     title Checkers
     link(rel='stylesheet', href='/vendor/font-awesome/css/font-awesome.min.css')
     link(rel='stylesheet', href=isProd ? '/index.min.css' : '/index.css')
@@ -12,7 +12,8 @@ html
         #players
           p#p1.player Player 1
           p#p2.player Player 2
-          p#winmessage
+      #winmessage
+        p Winner!
       #checkersboard
         table
           each row in [0, 2, 4, 6]

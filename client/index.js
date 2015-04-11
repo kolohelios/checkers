@@ -160,7 +160,7 @@ function removeCompetitorPiece(space, $originSpace, competitor){
       var middleY = $(space).data('y') - 1;
     }
     var $middleSpace = $('[data-x=' + middleX + '][data-y=' + middleY + ']');
-    $middleSpace.removeClass(competitor + ' ' + competitor + '-pawn');
+    $middleSpace.removeClass(competitor + ' ' + competitor + '-pawn' + ' ' + competitor + '-king');
   }
 }
 
@@ -185,16 +185,18 @@ function checkForCrowning(player, space){
 }
 
 function isThereAWinner(){
-  var p1Pieces = $('p1').length;
-  var p2Pieces = $('p2').length;
+  var p1Pieces = $('.p1').length;
+  var p2Pieces = $('.p2').length;
   if(p1Pieces === 0){
     var winMessage = "Player 2 Wins!";
-    $('#winmesage').text(winMessage);
+    $('#controls').hide();
+    $('#winmessage').text(winMessage);
     $('#winmessage').show();
   }
   else if(p2Pieces === 0){
+    $('#controls').hide();
     var winMessage = "Player 1 Wins!";
-    $('#winmesage').text(winMessage);
+    $('#winmessage').text(winMessage);
     $('#winmessage').show();
   }
 }

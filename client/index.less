@@ -1,10 +1,29 @@
 #container{
+  text-align: center;
   margin: 0 auto;
 }
 #controls{
-  display: block;
-  width: 100px;
   color: white;
+  display: inline-block;
+  margin: 10px auto;
+}
+#players{
+
+}
+.player{
+  display: inline;
+  font-size: 35px;
+  margin: 10px 25px;
+}
+#winmessage{
+  border: 5px red solid;
+  color: black;
+  margin: 100px;
+  font-size: 25px;
+  display: none;
+}
+#checkersboard{
+  display: inline-block;
 }
 .space{
   width: 80px;
@@ -44,9 +63,6 @@
 .activeplayer{
     border: 4px green solid;
 }
-#players{
-
-}
 #p1{
   background-color: #d58123;
 }
@@ -59,7 +75,4 @@
 }
 .debughighlight{
   border: 4px red dashed;
-}
-#winmessage{
-  display: none;
 }
