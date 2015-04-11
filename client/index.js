@@ -33,7 +33,6 @@ function activePlayerToggle(){
 }
 
 function clickToPick(){
-
   if($(this).hasClass('highlightedspace')){
     $(this).removeClass('highlightedspace');
     findLegalMoves();
@@ -126,6 +125,14 @@ function setLegalSpace(x, y){
 function movePiece(space){
   var activePlayer = $('.activeplayer').attr('id');
   var $originSpace = $('.highlightedspace');
+  var competitor = (activePlayer === 'p1') ? 'p2' : 'p1';
+  removeCompetitorPiece(space, $originSpace, competitor);
+  $('.highlightedspace').removeClass(activePlayer).removeClass(activePlayer + '-pawn').removeClass('highlightedspace');
+  $(space).addClass(activePlayer).addClass(activePlayer + '-pawn');
+  checkForCrowning(activePlayer, space);
+}
+
+function removeCompetitorPiece(space, $originSpace, competitor){
   if (Math.abs(($(space).data('x') - $originSpace.data('x'))) === 2){
     var deltaX = ($(space).data('x') - $originSpace.data('x'));
     var deltaY = ($(space).data('y') - $originSpace.data('y'));
@@ -142,11 +149,8 @@ function movePiece(space){
       var middleY = $(space).data('y') - 1;
     }
     var $middleSpace = $('[data-x=' + middleX + '][data-y=' + middleY + ']');
-    var competitor = (activePlayer === 'p1') ? 'p2' : 'p1';
     $middleSpace.removeClass(competitor + ' ' + competitor + '-pawn');
   }
-  $('.highlightedspace').removeClass(activePlayer).removeClass(activePlayer + '-pawn').removeClass('highlightedspace');
-  $(space).addClass(activePlayer).addClass(activePlayer + '-pawn');
 }
 
 function createArrayOfPlayerSpaces(player) {
@@ -157,4 +161,14 @@ function createArrayOfPlayerSpaces(player) {
     array.push([x, y]);
   });
   return array;
+}
+
+function checkForCrowning(player, space){
+  var yValue = $(space).data('y');
+  if(player === 'p1' && yValue === 7 && $(space).hasClass('p1-pawn')){
+    $(space).removeClass('p1-pawn').addClass('p1-king');
+  }
+  else if(player === 'p2' && yValue === 0 && $(space).hasClass('p2-pawn')){
+    $(space).removeClass('p2-pawn').addClass('p2-king');
+  }
 }
