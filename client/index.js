@@ -2,12 +2,10 @@
 
 $(document).ready(init);
 
-var moveStaged = false;
-
 function init(){
   paintCheckers();
   whichPlayerStartsFirst();
-  findLegalMoves();
+  setSpacesForTurn();
 }
 
 function paintCheckers(){
@@ -35,25 +33,21 @@ function activePlayerToggle(){
 }
 
 function clickToPick(){
-  if(moveStaged){
-    if($(this).hasClass('highlightedspace')){
-      $(this).removeClass('highlightedspace');
-      moveStaged = false;
-      findLegalMoves();
-    }
-    else{
-      movePiece(this);
-      activePlayerToggle();
-      moveStaged = false;
-      findLegalMoves();
-    }
+
+  if($(this).hasClass('highlightedspace')){
+    $(this).removeClass('highlightedspace');
+    findLegalMoves();
   }
-  else{
+  else if($('.highlightedspace').length === 0){
     $(this).addClass('highlightedspace');
     var x = $(this).data('x');
     var y = $(this).data('y');
-    moveStaged = true;
     findLegalMoves(x, y);
+  }
+  else{
+    movePiece(this);
+    activePlayerToggle();
+    setSpacesForTurn();
   }
 }
 
@@ -62,7 +56,6 @@ function findLegalMoves(x, y){
   $('.debughighlight').removeClass('debughighlight');
   setLegalSpace(x, y); // set current space
   var activePlayer = $('.activeplayer').attr('id');
-  if(moveStaged){
     var loc = $('.highlightedspace');
     var x = loc.data('x');
     var y = loc.data('y');
@@ -79,15 +72,17 @@ function findLegalMoves(x, y){
         }
       }
     });
-  }
-  else{
-    var arrayOfSpaces = createArrayOfPlayerSpaces(activePlayer);
-    arrayOfSpaces.forEach(function(array){
-      var x = array[0];
-      var y = array[1];
-      setLegalSpace(x, y);
-    });
-  }
+}
+
+function setSpacesForTurn(){
+  $('.highlightedspace').removeClass('.highlightedspace');
+  var activePlayer = $('.activeplayer').attr('id');
+  var arrayOfSpaces = createArrayOfPlayerSpaces(activePlayer);
+  arrayOfSpaces.forEach(function(array){
+    var x = array[0];
+    var y = array[1];
+    setLegalSpace(x, y);
+  });
 }
 
 function isPositionOnBoard(x, y){
@@ -132,7 +127,6 @@ function movePiece(space){
   var activePlayer = $('.activeplayer').attr('id');
   var $originSpace = $('.highlightedspace');
   if (Math.abs(($(space).data('x') - $originSpace.data('x'))) === 2){
-    console.log('checking for jump move');
     var deltaX = ($(space).data('x') - $originSpace.data('x'));
     var deltaY = ($(space).data('y') - $originSpace.data('y'));
     if(deltaX < 0){
@@ -154,6 +148,7 @@ function movePiece(space){
   $('.highlightedspace').removeClass(activePlayer).removeClass(activePlayer + '-pawn').removeClass('highlightedspace');
   $(space).addClass(activePlayer).addClass(activePlayer + '-pawn');
 }
+
 function createArrayOfPlayerSpaces(player) {
   var array = [];
   $('.' + player).each(function() {
