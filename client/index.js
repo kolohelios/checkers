@@ -110,14 +110,11 @@ function isCompetitorAndPlayerNotInTheWay(x, y, player){
   else{
     return true;
   }
-
-  // can jump?
 }
 
 function canJump(x, y){
-  console.log(x, y);
   var loc = $('[data-x=' + x + '][data-y=' + y + ']');
-  if(($(loc).hasClass('.p1')) || ($(loc).hasClass('.p2'))){
+  if(($(loc).hasClass('p1')) || ($(loc).hasClass('p2'))){
     return false;
   }
   else{
@@ -133,10 +130,30 @@ function setLegalSpace(x, y){
 
 function movePiece(space){
   var activePlayer = $('.activeplayer').attr('id');
+  var $originSpace = $('.highlightedspace');
+  if (Math.abs(($(space).data('x') - $originSpace.data('x'))) === 2){
+    console.log('checking for jump move');
+    var deltaX = ($(space).data('x') - $originSpace.data('x'));
+    var deltaY = ($(space).data('y') - $originSpace.data('y'));
+    if(deltaX < 0){
+      var middleX = $(space).data('x') + 1;
+    }
+    else{
+      var middleX = $(space).data('x') - 1;
+    }
+    if(deltaY < 0){
+      var middleY = $(space).data('y') + 1;
+    }
+    else{
+      var middleY = $(space).data('y') - 1;
+    }
+    var $middleSpace = $('[data-x=' + middleX + '][data-y=' + middleY + ']');
+    var competitor = (activePlayer === 'p1') ? 'p2' : 'p1';
+    $middleSpace.removeClass(competitor + ' ' + competitor + '-pawn');
+  }
   $('.highlightedspace').removeClass(activePlayer).removeClass(activePlayer + '-pawn').removeClass('highlightedspace');
   $(space).addClass(activePlayer).addClass(activePlayer + '-pawn');
 }
-
 function createArrayOfPlayerSpaces(player) {
   var array = [];
   $('.' + player).each(function() {
