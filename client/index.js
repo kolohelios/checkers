@@ -35,7 +35,7 @@ function activePlayerToggle(){
 function clickToPick(){
   if($(this).hasClass('highlightedspace')){
     $(this).removeClass('highlightedspace');
-    findLegalMoves();
+    setSpacesForTurn();
   }
   else if($('.highlightedspace').length === 0){
     $(this).addClass('highlightedspace');
@@ -48,6 +48,7 @@ function clickToPick(){
     activePlayerToggle();
     setSpacesForTurn();
   }
+  isThereAWinner();
 }
 
 function findLegalMoves(x, y){
@@ -55,26 +56,34 @@ function findLegalMoves(x, y){
   $('.debughighlight').removeClass('debughighlight');
   setLegalSpace(x, y); // set current space
   var activePlayer = $('.activeplayer').attr('id');
-    var loc = $('.highlightedspace');
-    var x = loc.data('x');
-    var y = loc.data('y');
-    var yDirection = (activePlayer === 'p1') ? 1 : -1;
-    [1, -1].forEach(function(i) {
-      if(isPositionOnBoard(x + i, y + yDirection)){
-        if(isCompetitorAndPlayerNotInTheWay(x + i, y + yDirection, activePlayer)){
-          setLegalSpace(x + i, y + yDirection);
+  if($('.highlightedspace').hasClass(activePlayer + '-king')){
+    var isKing = true;
+  }
+
+  var loc = $('.highlightedspace');
+  var x = loc.data('x');
+  var y = loc.data('y');
+  var yArray = (isKing) ? [1, -1] : [1];
+  var yDirection = (activePlayer === 'p1') ? 1 : -1;
+  [1, -1].forEach(function(i) {
+    yArray.forEach(function(j) {
+      if(isPositionOnBoard(x + i, y + (j * yDirection))){
+        if(isCompetitorAndPlayerNotInTheWay(x + i, y + (j * yDirection), activePlayer)){
+          setLegalSpace(x + i, y + (j * yDirection));
         }
         else{
-          if(canJump(x + i * 2, y + yDirection * 2)){
-            setLegalSpace(x + i * 2, y + yDirection * 2);
+          if(canJump(x + i * 2, y + (j * yDirection * 2))){
+            setLegalSpace(x + i * 2, y + (j * yDirection * 2));
           }
         }
       }
     });
+  });
 }
 
 function setSpacesForTurn(){
-  $('.highlightedspace').removeClass('.highlightedspace');
+  $('.highlightedspace').removeClass('highlightedspace');
+  $('.debughighlight').removeClass('debughighlight');
   var activePlayer = $('.activeplayer').attr('id');
   var arrayOfSpaces = createArrayOfPlayerSpaces(activePlayer);
   arrayOfSpaces.forEach(function(array){
@@ -127,8 +136,10 @@ function movePiece(space){
   var $originSpace = $('.highlightedspace');
   var competitor = (activePlayer === 'p1') ? 'p2' : 'p1';
   removeCompetitorPiece(space, $originSpace, competitor);
-  $('.highlightedspace').removeClass(activePlayer).removeClass(activePlayer + '-pawn').removeClass('highlightedspace');
-  $(space).addClass(activePlayer).addClass(activePlayer + '-pawn');
+  var originClasses = $originSpace.attr('class'); //.removeClass(activePlayer).removeClass(activePlayer + '-pawn').removeClass('highlightedspace');
+  var spaceClasses = $(space).attr('class');
+  $(space).attr('class', originClasses);
+  $originSpace.attr('class', spaceClasses);
   checkForCrowning(activePlayer, space);
 }
 
@@ -170,5 +181,20 @@ function checkForCrowning(player, space){
   }
   else if(player === 'p2' && yValue === 0 && $(space).hasClass('p2-pawn')){
     $(space).removeClass('p2-pawn').addClass('p2-king');
+  }
+}
+
+function isThereAWinner(){
+  var p1Pieces = $('p1').length;
+  var p2Pieces = $('p2').length;
+  if(p1Pieces === 0){
+    var winMessage = "Player 2 Wins!";
+    $('#winmesage').text(winMessage);
+    $('#winmessage').show();
+  }
+  else if(p2Pieces === 0){
+    var winMessage = "Player 1 Wins!";
+    $('#winmesage').text(winMessage);
+    $('#winmessage').show();
   }
 }
