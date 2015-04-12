@@ -52,14 +52,12 @@ function clickToPick(){
 }
 
 function findLegalMoves(x, y){
-  $('td').off('click');
-  $('.debughighlight').removeClass('debughighlight');
+  clearClickableSpacesAndDebugHighlighting();
   setLegalSpace(x, y); // set current space
   var activePlayer = $('.activeplayer').attr('id');
   if($('.highlightedspace').hasClass(activePlayer + '-king')){
     var isKing = true;
   }
-
   var loc = $('.highlightedspace');
   var x = loc.data('x');
   var y = loc.data('y');
@@ -72,18 +70,19 @@ function findLegalMoves(x, y){
           setLegalSpace(x + i, y + (j * yDirection));
         }
         else{
-          if(canJump(x + i * 2, y + (j * yDirection * 2))){
+          if(canJump(x + i * 2, y + (j * yDirection * 2), activePlayer, isKing)){
             setLegalSpace(x + i * 2, y + (j * yDirection * 2));
           }
         }
       }
     });
   });
+  console.log($('.debughighlight').length - 1);
 }
 
 function setSpacesForTurn(){
+  clearClickableSpacesAndDebugHighlighting();
   $('.highlightedspace').removeClass('highlightedspace');
-  $('.debughighlight').removeClass('debughighlight');
   var activePlayer = $('.activeplayer').attr('id');
   var arrayOfSpaces = createArrayOfPlayerSpaces(activePlayer);
   arrayOfSpaces.forEach(function(array){
@@ -91,6 +90,11 @@ function setSpacesForTurn(){
     var y = array[1];
     setLegalSpace(x, y);
   });
+}
+
+function clearClickableSpacesAndDebugHighlighting(){
+  $('td').off('click');
+  $('.debughighlight').removeClass('debughighlight');
 }
 
 function isPositionOnBoard(x, y){
@@ -115,13 +119,24 @@ function isCompetitorAndPlayerNotInTheWay(x, y, player){
   }
 }
 
-function canJump(x, y){
+function canJump(x, y, player, isKing){
   var loc = $('[data-x=' + x + '][data-y=' + y + ']');
-  if(($(loc).hasClass('p1')) || ($(loc).hasClass('p2'))){
-    return false;
+  if(isKing){
+    if(($(loc).hasClass('p1')) || ($(loc).hasClass('p2'))){
+      return false;
+    }
+    else{
+      return true;
+    }
   }
   else{
-    return true;
+    var competitor = (player === 'p1') ? 'p2' : 'p2';
+    if($(loc).hasClass(competitor)){
+      return false;
+    }
+    else{
+      return true;
+    }
   }
 }
 
@@ -135,33 +150,42 @@ function movePiece(space){
   var activePlayer = $('.activeplayer').attr('id');
   var $originSpace = $('.highlightedspace');
   var competitor = (activePlayer === 'p1') ? 'p2' : 'p1';
-  removeCompetitorPiece(space, $originSpace, competitor);
+  var subsequentJump = false;
+  if (Math.abs(($(space).data('x') - $originSpace.data('x'))) === 2){
+    removeCompetitorPiece(space, $originSpace, competitor);
+    var subsequentJump = findLegalMoves();
+  }
   var originClasses = $originSpace.attr('class'); //.removeClass(activePlayer).removeClass(activePlayer + '-pawn').removeClass('highlightedspace');
   var spaceClasses = $(space).attr('class');
   $(space).attr('class', originClasses);
   $originSpace.attr('class', spaceClasses);
   checkForCrowning(activePlayer, space);
+  if(subsequentJump){
+
+  }
 }
 
 function removeCompetitorPiece(space, $originSpace, competitor){
-  if (Math.abs(($(space).data('x') - $originSpace.data('x'))) === 2){
-    var deltaX = ($(space).data('x') - $originSpace.data('x'));
-    var deltaY = ($(space).data('y') - $originSpace.data('y'));
-    if(deltaX < 0){
-      var middleX = $(space).data('x') + 1;
-    }
-    else{
-      var middleX = $(space).data('x') - 1;
-    }
-    if(deltaY < 0){
-      var middleY = $(space).data('y') + 1;
-    }
-    else{
-      var middleY = $(space).data('y') - 1;
-    }
-    var $middleSpace = $('[data-x=' + middleX + '][data-y=' + middleY + ']');
-    $middleSpace.removeClass(competitor + ' ' + competitor + '-pawn' + ' ' + competitor + '-king');
+  var deltaX = ($(space).data('x') - $originSpace.data('x'));
+  var deltaY = ($(space).data('y') - $originSpace.data('y'));
+  if(deltaX < 0){
+    var middleX = $(space).data('x') + 1;
   }
+  else{
+    var middleX = $(space).data('x') - 1;
+  }
+  if(deltaY < 0){
+    var middleY = $(space).data('y') + 1;
+  }
+  else{
+    var middleY = $(space).data('y') - 1;
+  }
+  var $middleSpace = $('[data-x=' + middleX + '][data-y=' + middleY + ']');
+  $middleSpace.removeClass(competitor + ' ' + competitor + '-pawn' + ' ' + competitor + '-king');
+}
+
+function checkForSubsequentJump(){
+  return false;
 }
 
 function createArrayOfPlayerSpaces(player) {
