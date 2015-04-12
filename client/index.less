@@ -13,31 +13,38 @@ body{
   margin: 0 auto;
   background-color: rgba(130, 125, 125, 0.6);
 }
-@media (min-width: 500px){
-  #controls{
-    color: white;
-    display: inline-block;
-    margin: 5px auto;
+#controls{
+  color: white;
+  display: inline-block;
+  margin: 5px auto;
+}
+#players{
+  margin: 0 10px;
+}
+.player{
+  font-family: helvetica;
+  font-weight: 100;
+  letter-spacing: 2px;
+  font-size: 25px;
+  padding: 5px;
+  margin: 10px;
+  -webkit-box-shadow: @dropshadow;
+  border: 5px transparent solid;
+}
+#p1{
+  background-color: rgba(230, 145, 9, 0.75);
+}
+#p2{
+  background-color: rgba(73, 72, 72, 0.75);
+}
+@media (min-width: 600px) or (orientation: landscape){
+  .player{
+    display: block;
   }
-  #players{
-    margin: 0 10px;
-  }
+}
+@media(max-width: 600px) or (orientation: portrait){
   .player{
     display: inline;
-    font-family: helvetica;
-    font-weight: 100;
-    letter-spacing: 2px;
-    font-size: 25px;
-    padding: 5px;
-    margin: 10px;
-    -webkit-box-shadow: @dropshadow;
-    border: 5px transparent solid;
-  }
-  #p1{
-    background-color: rgba(230, 145, 9, 0.75);
-  }
-  #p2{
-    background-color: rgba(73, 72, 72, 0.75);
   }
 }
 #winmessage{
