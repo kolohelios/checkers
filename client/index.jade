@@ -9,11 +9,13 @@ html
   body
     #container
       #controls
+        h1 Marmot Checkers
         #players
           p#p1.player Player 1
+            #p1.count
           p#p2.player Player 2
-      #winmessage
-        p Winner!
+            #p2.count
+      p#winmessage Winner!
       #checkersboard
         table
           each row in [0, 2, 4, 6]

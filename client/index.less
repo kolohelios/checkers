@@ -1,19 +1,44 @@
+@darkgradient: linear-gradient(292deg, wheat, gray);
+@lightgradient: linear-gradient(292deg, rgba(10, 238, 238, 0.97), wheat);
+@dropshadow: 7px 7px 3px rgba(0,0,0,0.75);
+@spaceborderwidth: 3px;
+
+body{
+  background-image: url('/assets/marmot.jpg');
+  background-size: 100px;
+  background-repeat: repeat;
+}
 #container{
   text-align: center;
   margin: 0 auto;
+  background-color: rgba(130, 125, 125, 0.6);
 }
-#controls{
-  color: white;
-  display: inline-block;
-  margin: 10px auto;
-}
-#players{
-
-}
-.player{
-  display: inline;
-  font-size: 35px;
-  margin: 10px 25px;
+@media (min-width: 500px){
+  #controls{
+    color: white;
+    display: inline-block;
+    margin: 5px auto;
+  }
+  #players{
+    margin: 0 10px;
+  }
+  .player{
+    display: inline;
+    font-family: helvetica;
+    font-weight: 100;
+    letter-spacing: 2px;
+    font-size: 25px;
+    padding: 5px;
+    margin: 10px;
+    -webkit-box-shadow: @dropshadow;
+    border: 5px transparent solid;
+  }
+  #p1{
+    background-color: rgba(230, 145, 9, 0.75);
+  }
+  #p2{
+    background-color: rgba(73, 72, 72, 0.75);
+  }
 }
 #winmessage{
   border: 5px red solid;
@@ -26,53 +51,61 @@
   display: inline-block;
 }
 .space{
-  width: 80px;
-  height: 80px;
-  border: 4px black solid;
+  width: 75px;
+  height: 75px;
+  margin: 4px;
+  -webkit-box-shadow: @dropshadow;
+  border: @spaceborderwidth transparent solid;
 }
 .black{
-  background-color: black;
+  background-image: @darkgradient;
+  background-size: 90px;
+  background-origin: border-box;
 }
 .white{
-  background-color: white;
+  background-image: @lightgradient;
+  background-size: 90px;
+  background-origin: border-box;
 }
 .p1-pawn{
-  background-image: url('/assets/marmot-red.png');
-  background-size: 60px;
-  background-repeat: no-repeat;
+  background-image: url('/assets/marmot-red.png'), @darkgradient;
   background-position: bottom;
+  background-size: 60px, 90px;
+  background-origin: border-box;
+  background-repeat: no-repeat;
+  border: @spaceborderwidth transparent solid;
 }
 .p2-pawn{
-  background-image: url('/assets/marmot-black.png');
-  background-size: 60px;
-  background-repeat: no-repeat;
+  background-image: url('/assets/marmot-black.png'), @darkgradient;
   background-position: bottom;
+  background-size: 60px, 90px;
+  background-origin: border-box;
+  background-repeat: no-repeat;
+  border: @spaceborderwidth transparent solid;
 }
 .p1-king{
-  background-image: url('/assets/grizzly-red.png');
-  background-size: 40px;
+  background-image: url('/assets/grizzly-red.png'), @darkgradient;
+  background-position: bottom;
+  background-size: 60px, 90px;
+  background-origin: border-box;
   background-repeat: no-repeat;
-  background-position: center;
+  border: @spaceborderwidth transparent solid;
 }
 .p2-king{
-  background-image: url('/assets/grizzly-black.png');
-  background-size: 40px;
+  background-image: url('/assets/grizzly-black.png'), @darkgradient;
+  background-position: bottom;
+  background-size: 60px, 90px;
+  background-origin: border-box;
   background-repeat: no-repeat;
-  background-position: center;
+  border: @spaceborderwidth transparent solid;
 }
 .activeplayer{
-    border: 4px green solid;
-}
-#p1{
-  background-color: #d58123;
-}
-#p2{
-  background-color: black;
+  border: 5px green solid;
+  margin: 5px;
 }
 .highlightedspace{
-  border: 4px rgba(166, 194, 42, 0.83) dotted;
-  margin: -4px;
+  border: @spaceborderwidth rgba(195, 61, 40, 1.0) solid;
 }
 .debughighlight{
-  border: 4px red dashed;
+  border: @spaceborderwidth rgba(243, 166, 45, 1.0) dashed;
 }
