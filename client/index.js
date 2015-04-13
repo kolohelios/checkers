@@ -70,12 +70,13 @@ function findLegalMoves(x, y, firstMove){
   setLegalSpace(x, y); // set current space
   $('.highlightedspace').removeClass('debughighlight');
   var activePlayer = $('.activeplayer').attr('id');
+  var isKing = false;
   if($('.highlightedspace').hasClass(activePlayer + '-king')){
-    var isKing = true;
+    isKing = true;
   }
   var loc = $('.highlightedspace');
-  var x = loc.data('x');
-  var y = loc.data('y');
+  x = loc.data('x');
+  y = loc.data('y');
   var yArray = (isKing) ? [1, -1] : [1];
   var yDirection = (activePlayer === 'p1') ? 1 : -1;
   [1, -1].forEach(function(i){
@@ -144,19 +145,6 @@ function positionState(x, y, player){
   }
 }
 
-/*
-function canJump(x, y, player){
-  var loc = $('[data-x=' + x + '][data-y=' + y + ']');
-  var competitor = (player === 'p1') ? 'p2' : 'p2';
-  if($(loc).hasClass(competitor)){
-    return false;
-  }
-  else{
-    return true;
-  }
-}
-*/
-
 function setLegalSpace(x, y){
     var $loc = $('[data-x=' + x + '][data-y=' + y + ']');
     $loc.on('click', clickToPick);
@@ -168,11 +156,12 @@ function movePiece(space){
   var $originSpace = $('.highlightedspace');
   var competitor = (activePlayer === 'p1') ? 'p2' : 'p1';
   var subsequentJumpAvailable = false;
+  var pieceRemoved;
   if (Math.abs(($(space).data('x') - $originSpace.data('x'))) === 2){
     removeCompetitorPiece(space, $originSpace, competitor);
-    var pieceRemoved = true;
+    pieceRemoved = true;
   }
-  var originClasses = $originSpace.attr('class'); //.removeClass(activePlayer).removeClass(activePlayer + '-pawn').removeClass('highlightedspace');
+  var originClasses = $originSpace.attr('class');
   var spaceClasses = $(space).attr('class');
   $(space).attr('class', originClasses);
   $originSpace.attr('class', spaceClasses);
@@ -193,18 +182,9 @@ function movePiece(space){
 function removeCompetitorPiece(space, $originSpace, competitor){
   var deltaX = ($(space).data('x') - $originSpace.data('x'));
   var deltaY = ($(space).data('y') - $originSpace.data('y'));
-  if(deltaX < 0){
-    var middleX = $(space).data('x') + 1;
-  }
-  else{
-    var middleX = $(space).data('x') - 1;
-  }
-  if(deltaY < 0){
-    var middleY = $(space).data('y') + 1;
-  }
-  else{
-    var middleY = $(space).data('y') - 1;
-  }
+  var middleX, middleY;
+  middleX = (deltaX < 0) ? $(space).data('x') + 1 : middleX = $(space).data('x') - 1;
+  middleY = (deltaY < 0) ? $(space).data('y') + 1 : middleY = $(space).data('y') - 1;
   var $middleSpace = $('[data-x=' + middleX + '][data-y=' + middleY + ']');
   $middleSpace.removeClass(competitor + ' ' + competitor + '-pawn' + ' ' + competitor + '-king');
 }
@@ -239,16 +219,17 @@ function getAndUpdatePieceCounts(){
 
 function isThereAWinner(){
   var pieceCounts = getAndUpdatePieceCounts();
-  if(pieceCounts[0] === 0){
-    var winMessage = "Player 2 Wins!";
-    $('#controls').hide();
-    $('#winmessage').text(winMessage);
-    $('#winmessage').show();
+  if(pieceCounts[0] === 0){ // player 2
+    displayWinMessage(2);
   }
-  else if(pieceCounts[1] === 0){
-    $('#controls').hide();
-    var winMessage = "Player 1 Wins!";
-    $('#winmessage').text(winMessage);
-    $('#winmessage').show();
+  else if(pieceCounts[1] === 0){ // player 1
+    displayWinMessage(1);
   }
+}
+
+function displayWinMessage(winningPlayer){
+  $('#controls').hide();
+  var winMessage = 'Player ' + winningPlayer + 'Wins!';
+  $('#winmessage').text(winMessage);
+  $('#winmessage').show();
 }
