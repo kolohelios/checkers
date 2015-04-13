@@ -8,6 +8,7 @@ function init(){
   paintCheckers();
   whichPlayerStartsFirst();
   setSpacesForTurn();
+  getAndUpdatePieceCounts();
 }
 
 function paintCheckers(){
@@ -59,6 +60,7 @@ function clickToPick(){
     var y = $(this).data('y');
     findLegalMoves(x, y, true);
   }
+  getAndUpdatePieceCounts();
   isThereAWinner();
   console.log(disableChangeHighlight);
 }
@@ -66,6 +68,7 @@ function clickToPick(){
 function findLegalMoves(x, y, firstMove){
   clearClickableSpacesAndDebugHighlighting();
   setLegalSpace(x, y); // set current space
+  $('.highlightedspace').removeClass('debughighlight');
   var activePlayer = $('.activeplayer').attr('id');
   if($('.highlightedspace').hasClass(activePlayer + '-king')){
     var isKing = true;
@@ -226,16 +229,23 @@ function checkForCrowning(player, space){
   }
 }
 
-function isThereAWinner(){
+function getAndUpdatePieceCounts(){
   var p1Pieces = $('.p1').length;
   var p2Pieces = $('.p2').length;
-  if(p1Pieces === 0){
+  $('#p1count').text(p1Pieces);
+  $('#p2count').text(p2Pieces);
+  return [p1Pieces, p2Pieces];
+}
+
+function isThereAWinner(){
+  var pieceCounts = getAndUpdatePieceCounts();
+  if(pieceCounts[0] === 0){
     var winMessage = "Player 2 Wins!";
     $('#controls').hide();
     $('#winmessage').text(winMessage);
     $('#winmessage').show();
   }
-  else if(p2Pieces === 0){
+  else if(pieceCounts[1] === 0){
     $('#controls').hide();
     var winMessage = "Player 1 Wins!";
     $('#winmessage').text(winMessage);

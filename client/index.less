@@ -1,12 +1,17 @@
 @darkgradient: linear-gradient(292deg, wheat, gray);
 @lightgradient: linear-gradient(292deg, rgba(10, 238, 238, 0.97), wheat);
-@dropshadow: 7px 7px 3px rgba(0,0,0,0.75);
-@spaceborderwidth: 3px;
+@dropshadow: 8px 8px 4px rgba(0,0,0,0.75);
+@playercolor: rgba(4, 184, 255, 0.75);
+@spaceborderwidth: 5px;
+@controlcolor: rgba(111, 108, 108, 0.6);
 
 body{
   background-image: url('/assets/marmot.jpg');
   background-size: 100px;
   background-repeat: repeat;
+  font-family: helvetica;
+  font-weight: 100;
+  -webkit-font-smoothing: antialiased;
 }
 #container{
   text-align: center;
@@ -18,33 +23,47 @@ body{
   display: inline-block;
   margin: 5px auto;
 }
-#players{
-  margin: 0 10px;
-}
-.player{
+#title{
   font-family: helvetica;
-  font-weight: 100;
+  font-weight: 600;
+  -webkit-box-shadow: @dropshadow;
+  padding: 10px;
+  color: @playercolor;
+  background-color: @controlcolor;
+  display: inline-block;
+}
+#players{
+  margin: 0 auto;
   letter-spacing: 2px;
   font-size: 25px;
   padding: 5px;
-  margin: 10px;
   -webkit-box-shadow: @dropshadow;
+  background-color: @controlcolor;
   border: 5px transparent solid;
 }
+.player{
+  margin: auto 20px;
+}
 #p1{
-  background-color: rgba(230, 145, 9, 0.75);
+  background-color: rgba(233, 75, 9, 0.75);
 }
 #p2{
-  background-color: rgba(73, 72, 72, 0.75);
+  background-color: rgba(36, 36, 36, 0.75);
 }
 @media (min-width: 600px) or (orientation: landscape){
   .player{
+    display: block;
+  }
+  #p1count, #p2count{
     display: block;
   }
 }
 @media(max-width: 600px) or (orientation: portrait){
   .player{
     display: inline;
+  }
+  #p1count, #p2count{
+    display: block;
   }
 }
 #winmessage{
@@ -93,7 +112,7 @@ body{
 .p1-king{
   background-image: url('/assets/grizzly-red.png'), @darkgradient;
   background-position: bottom;
-  background-size: 60px, 90px;
+  background-size: 35px, 90px;
   background-origin: border-box;
   background-repeat: no-repeat;
   border: @spaceborderwidth transparent solid;
@@ -101,18 +120,17 @@ body{
 .p2-king{
   background-image: url('/assets/grizzly-black.png'), @darkgradient;
   background-position: bottom;
-  background-size: 60px, 90px;
+  background-size: 35px, 90px;
   background-origin: border-box;
   background-repeat: no-repeat;
   border: @spaceborderwidth transparent solid;
 }
 .activeplayer{
-  border: 5px green solid;
-  margin: 5px;
+  border: 5px @playercolor solid;
 }
 .highlightedspace{
-  border: @spaceborderwidth rgba(195, 61, 40, 1.0) solid;
+  border: @spaceborderwidth @playercolor solid;
 }
 .debughighlight{
-  border: @spaceborderwidth rgba(243, 166, 45, 1.0) dashed;
+  border: @spaceborderwidth @playercolor dashed;
 }
