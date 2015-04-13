@@ -62,7 +62,6 @@ function clickToPick(){
   }
   getAndUpdatePieceCounts();
   isThereAWinner();
-  console.log(disableChangeHighlight);
 }
 
 function findLegalMoves(x, y, firstMove){
@@ -74,6 +73,7 @@ function findLegalMoves(x, y, firstMove){
   if($('.highlightedspace').hasClass(activePlayer + '-king')){
     isKing = true;
   }
+  console.log(isKing);
   var loc = $('.highlightedspace');
   x = loc.data('x');
   y = loc.data('y');
@@ -98,7 +98,7 @@ function findLegalMoves(x, y, firstMove){
       }
     });
   });
-  var legalMovesAvailable = $('.debughighlight').length - 1;
+  var legalMovesAvailable = $('.debughighlight').length;
   console.log('legal moves available', legalMovesAvailable);
   return legalMovesAvailable;
 }
