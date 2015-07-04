@@ -229,7 +229,7 @@ function isThereAWinner(){
 
 function displayWinMessage(winningPlayer){
   $('#controls').hide();
-  var winMessage = 'Player ' + winningPlayer + 'Wins!';
+  var winMessage = 'Player ' + winningPlayer + ' Wins!';
   $('#winmessage').text(winMessage);
   $('#winmessage').show();
 }
