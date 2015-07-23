@@ -223,7 +223,6 @@
   function displayWinMessage(winningPlayer){
     $('#controls').hide();
     var winMessage = 'Player ' + winningPlayer + ' Wins!';
-    $('#winmessage').text(winMessage);
-    $('#winmessage').show();
+    $('#winmessage').text(winMessage).show();
   }
 })($);
