@@ -4,6 +4,7 @@ html
     meta(charset='utf-8')
     meta(name='viewport', content='initial-scale=1, minimal-ui')
     title Checkers
+    link(rel='stylesheet' href="/vendor/sweetalert/dist/sweetalert.css")
     link(rel='stylesheet', href=isProd ? '/index.min.css' : '/index.css')
     link(rel='shortcut icon', href='/favicon.ico')
   body
@@ -26,6 +27,8 @@ html
             span#p1count 12
           p#p2.player &#8593;&nbsp; Player 2&nbsp;&nbsp;
             span#p2count 12
+          button#draw Draw
       p#winmessage Winner!
+    script(src='/vendor/sweetalert/dist/sweetalert.min.js')
     script(src='/vendor/jquery/dist/jquery.min.js')
     script(src=isProd ? '/index.min.js' : '/index.js')

@@ -10,6 +10,7 @@
     whichPlayerStartsFirst();
     setSpacesForTurn();
     getAndUpdatePieceCounts();
+    $('#draw').click(draw);
   }
 
   function paintCheckers(){
@@ -213,16 +214,38 @@
     var pieceCounts = getAndUpdatePieceCounts();
     // player 2
     if(pieceCounts[0] === 0){
-      displayWinMessage(2);
+      displayWinOrDrawMessage('win', 2);
     // player 1
     }else if(pieceCounts[1] === 0){
-      displayWinMessage(1);
+      displayWinOrDrawMessage('win', 1);
     }
   }
 
-  function displayWinMessage(winningPlayer){
+  function displayWinOrDrawMessage(disposition, winningPlayer){
     $('#controls').hide();
-    var winMessage = 'Player ' + winningPlayer + ' Wins!';
-    $('#winmessage').text(winMessage).show();
+    var message = disposition === 'win' ? 'Player ' + winningPlayer + ' Wins!' : 'We\'ll call it a draw.';
+    $('#winmessage').text(message).show();
+  }
+
+  function draw(){
+    sweetAlert({
+      title: 'Call it a draw?',
+      text: 'Would you like to draw?',
+      confirmButtonText: 'Yes',
+      closeOnConfirm: false,
+      showCancelButton: true
+    }, confirm);
+    function confirm(){
+      activePlayerToggle();
+      console.log('in here');
+      sweetAlert({
+        title: 'Call it a draw?',
+        text: 'Would you also like to draw?',
+        confirmButtonText: 'Yes',
+        showCancelButton: true
+     }, function(){
+        displayWinOrDrawMessage('draw');
+      });
+    }
   }
 })($);
